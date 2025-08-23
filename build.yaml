@@ -1,0 +1,12 @@
+name: "Jellyfin Federation Plugin"
+guid: "931820b5-4177-4f48-be30-f0a34db3693f"
+imageUrl: "https://raw.githubusercontent.com/send-me-a-ticket/JellyfinFederationPlugin/refs/heads/main/logo.png"
+version: 1.0.0
+targetAbi: "10.9.7.0"
+framework: "net8.0"
+owner: "send-me-a-ticket"
+overview: "Enables library federation across Jellyfin servers."
+description: >
+  Enable federated media library. Share media library with others, and access remote media from your server.
+
+category: "General"

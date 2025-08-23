@@ -1,0 +1,11 @@
+{
+  "category": "General",
+  "changelog": "Currently Testing",
+  "description": "Enable federated media library. Share media library with others, and access remote media from your server.",
+  "guid": "931820b5-4177-4f48-be30-f0a34db3693f",
+  "name": "Jellyfin Federation Plugin",
+  "overview": "Enables library federation across Jellyfin servers.",
+  "owner": "send-me-a-ticket",
+  "targetAbi": "10.9.7.0",
+  "version": "1.0.0"
+}
