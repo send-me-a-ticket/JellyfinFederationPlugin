@@ -2,7 +2,7 @@
   {
     "guid": "931820b5-4177-4f48-be30-f0a34db3693f",
     "name": "Jellyfin Federation Plugin",
-    "description": "Enable federated media library. Share media library with others, and access remote media from your server.",
+    "description": "DOES NOT WORK - Under Construction : Enable federated media library. Share media library with others, and access remote media from your server.",
     "owner": "send-me-a-ticket",
     "category": "General",
     "imageUrl": "https://raw.githubusercontent.com/send-me-a-ticket/JellyfinFederationPlugin/refs/heads/main/logo.png",
@@ -19,4 +19,5 @@
     ]
   }
 ]
+
 
