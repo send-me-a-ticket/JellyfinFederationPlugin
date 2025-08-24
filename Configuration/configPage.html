@@ -5,7 +5,7 @@
     <title>Jellyfin Federation Plugin</title>
 </head>
 <body>
-    <div id="FederationConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-select">
+    <div id="FederationConfigPage" data-role="page" class="page type-interior pluginConfigurationPage">
         <div data-role="content">
             <div class="content-primary">
                 <form id="FederationConfigForm">
@@ -23,6 +23,25 @@
                         <button is="emby-button" type="button" id="addServer" class="raised button-submit emby-button">
                             <span>Add Server</span>
                         </button>
+
+                        <div id="addServerDialog" style="display:none;">
+                            <h3>Add New Server</h3>
+                            <div class="inputContainer">
+                                <input is="emby-input" type="text" id="newServerUrl" label="Server URL" placeholder="http://192.168.1.100:8096" />
+                            </div>
+                            <div class="inputContainer">
+                                <input is="emby-input" type="text" id="newServerApiKey" label="API Key" placeholder="Enter API Key" />
+                            </div>
+                            <div class="inputContainer">
+                                <input is="emby-input" type="number" id="newServerPort" label="Port" value="8096" placeholder="8096" />
+                            </div>
+                            <button is="emby-button" type="button" id="addNewServerBtn" class="raised button-submit emby-button">
+                                <span>Add</span>
+                            </button>
+                            <button is="emby-button" type="button" id="cancelAddServerBtn" class="raised button-cancel emby-button">
+                                <span>Cancel</span>
+                            </button>
+                        </div>
                     </div>
                     <br>
                     <div>
@@ -39,214 +58,9 @@
     </div>
 
     <script type="text/javascript">
-        (function () {
-            'use strict';
-
-            var pluginId = "931820b5-4177-4f48-be30-f0a34db3693f";
-            var currentConfig = {};
-
-            function loadConfig() {
-                console.log('Loading federation plugin configuration...');
-                Dashboard.showLoadingMsg();
-                
-                ApiClient.getPluginConfiguration(pluginId).then(function (config) {
-                    console.log('Config loaded:', config);
-                    currentConfig = config || {};
-                    populateConfig(currentConfig);
-                    Dashboard.hideLoadingMsg();
-                }).catch(function (err) {
-                    console.error('Error loading config:', err);
-                    Dashboard.hideLoadingMsg();
-                    Dashboard.alert('Error loading configuration');
-                });
-            }
-
-            function populateConfig(config) {
-                var serverList = document.getElementById('serverList');
-                serverList.innerHTML = '';
-                
-                var servers = config.FederatedServers || [];
-                
-                if (servers.length === 0) {
-                    addServerEntry();
-                } else {
-                    servers.forEach(function(server) {
-                        addServerEntry(server);
-                    });
-                }
-            }
-
-            function addServerEntry(server) {
-                server = server || {};
-                var serverList = document.getElementById('serverList');
-                
-                var entryDiv = document.createElement('div');
-                entryDiv.className = 'listItem paperListItem';
-                entryDiv.style.padding = '1em';
-                entryDiv.style.margin = '0.5em 0';
-                
-                // Create elements manually to avoid template literal issues
-                var listItemBody = document.createElement('div');
-                listItemBody.className = 'listItemBody three-line';
-                
-                // Server URL input
-                var urlContainer = document.createElement('div');
-                urlContainer.className = 'inputContainer';
-                urlContainer.style.marginBottom = '1em';
-                var urlInput = document.createElement('input');
-                urlInput.setAttribute('is', 'emby-input');
-                urlInput.type = 'text';
-                urlInput.className = 'serverUrl';
-                urlInput.setAttribute('label', 'Server URL');
-                urlInput.value = server.ServerUrl || '';
-                urlInput.placeholder = 'http://192.168.1.100:8096';
-                urlContainer.appendChild(urlInput);
-                
-                // API Key input
-                var keyContainer = document.createElement('div');
-                keyContainer.className = 'inputContainer';
-                keyContainer.style.marginBottom = '1em';
-                var keyInput = document.createElement('input');
-                keyInput.setAttribute('is', 'emby-input');
-                keyInput.type = 'text';
-                keyInput.className = 'apiKey';
-                keyInput.setAttribute('label', 'API Key');
-                keyInput.value = server.ApiKey || '';
-                keyInput.placeholder = 'Enter API Key';
-                keyContainer.appendChild(keyInput);
-                
-                // Port input
-                var portContainer = document.createElement('div');
-                portContainer.className = 'inputContainer';
-                portContainer.style.marginBottom = '1em';
-                var portInput = document.createElement('input');
-                portInput.setAttribute('is', 'emby-input');
-                portInput.type = 'number';
-                portInput.className = 'serverPort';
-                portInput.setAttribute('label', 'Port');
-                portInput.value = server.Port || 8096;
-                portInput.placeholder = '8096';
-                portContainer.appendChild(portInput);
-                
-                // Remove button
-                var removeBtn = document.createElement('button');
-                removeBtn.setAttribute('is', 'emby-button');
-                removeBtn.type = 'button';
-                removeBtn.className = 'removeServer raised button-cancel emby-button';
-                var removeSpan = document.createElement('span');
-                removeSpan.textContent = 'Remove';
-                removeBtn.appendChild(removeSpan);
-                
-                // Assemble the elements
-                listItemBody.appendChild(urlContainer);
-                listItemBody.appendChild(keyContainer);
-                listItemBody.appendChild(portContainer);
-                listItemBody.appendChild(removeBtn);
-                entryDiv.appendChild(listItemBody);
-                
-                serverList.appendChild(entryDiv);
-                
-                // Add remove functionality
-                removeBtn.addEventListener('click', function() {
-                    entryDiv.remove();
-                });
-            }
-
-            function saveConfig() {
-                console.log('Saving federation plugin configuration...');
-                Dashboard.showLoadingMsg();
-                
-                var serverList = document.getElementById('serverList');
-                var serverEntries = serverList.querySelectorAll('.listItem');
-                var servers = [];
-                
-                serverEntries.forEach(function(entry) {
-                    var serverUrl = entry.querySelector('.serverUrl').value.trim();
-                    var apiKey = entry.querySelector('.apiKey').value.trim();
-                    var serverPort = parseInt(entry.querySelector('.serverPort').value) || 8096;
-                    
-                    if (serverUrl && apiKey) {
-                        servers.push({
-                            ServerUrl: serverUrl,
-                            ApiKey: apiKey,
-                            Port: serverPort
-                        });
-                    }
-                });
-                
-                currentConfig.FederatedServers = servers;
-                
-                console.log('Saving config:', currentConfig);
-                
-                ApiClient.updatePluginConfiguration(pluginId, currentConfig).then(function () {
-                    console.log('Config saved successfully');
-                    Dashboard.hideLoadingMsg();
-                    Dashboard.processPluginConfigurationUpdateResult();
-                }).catch(function (err) {
-                    console.error('Error saving config:', err);
-                    Dashboard.hideLoadingMsg();
-                    Dashboard.alert('Error saving configuration');
-                });
-            }
-
-            function resetConfig() {
-                currentConfig = { FederatedServers: [] };
-                populateConfig(currentConfig);
-            }
-
-            // Initialize when the page is ready
-            document.addEventListener('viewshow', function () {
-                if (window.location.hash.indexOf('configurationpage?name=Jellyfin%20Federation%20Plugin') !== -1) {
-                    loadConfig();
-                }
-            });
-
-            // Fallback for DOMContentLoaded
-            document.addEventListener('DOMContentLoaded', function() {
-                console.log('DOM Content Loaded for Federation Plugin');
-                
-                var addButton = document.getElementById('addServer');
-                var form = document.getElementById('FederationConfigForm');
-                var resetButton = document.getElementById('resetConfig');
-                
-                if (addButton) {
-                    addButton.addEventListener('click', function() {
-                        console.log('Add server clicked');
-                        addServerEntry();
-                    });
-                }
-                
-                if (form) {
-                    form.addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        console.log('Form submitted');
-                        saveConfig();
-                        return false;
-                    });
-                }
-                
-                if (resetButton) {
-                    resetButton.addEventListener('click', function() {
-                        console.log('Reset clicked');
-                        resetConfig();
-                    });
-                }
-                
-                // Load config if we're on the right page
-                if (window.location.toString().indexOf('configurationpage') !== -1) {
-                    setTimeout(loadConfig, 100);
-                }
-            });
-
-            // Additional initialization for Jellyfin navigation
-            window.addEventListener('load', function() {
-                console.log('Window loaded for Federation Plugin');
-                if (document.getElementById('FederationConfigPage')) {
-                    setTimeout(loadConfig, 200);
-                }
-            });
-
-        })();
+        require(['./config'], function (configModule) {
+            configModule.default(document);
+        });
     </script>
 </body>
 </html>

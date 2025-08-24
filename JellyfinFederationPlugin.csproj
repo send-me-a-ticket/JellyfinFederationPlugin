@@ -20,13 +20,16 @@
     <PackageReference Include="Jellyfin.Controller" Version="10.9.7" />
     <PackageReference Include="Jellyfin.ApiClient" Version="10.7.2" />
     <PackageReference Include="Jellyfin.Model" Version="10.9.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <!-- For ILogger -->
   </ItemGroup>
+
   <ItemGroup>
     <None Remove="Configuration\configPage.html" />
-    <EmbeddedResource Include="Configuration\configPage.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <None Remove="Configuration\config.js" />
+    <EmbeddedResource Include="Configuration\configPage.html"><CopyToOutputDirectory>Always</CopyToOutputDirectory></EmbeddedResource>
+    <EmbeddedResource Include="Configuration\config.js"><CopyToOutputDirectory>Always</CopyToOutputDirectory></EmbeddedResource>
   </ItemGroup>
+  
 </Project>

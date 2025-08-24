@@ -5,11 +5,16 @@ namespace JellyfinFederationPlugin.Configuration
 {
     public class PluginConfiguration : BasePluginConfiguration
     {
-        public List<FederatedServer> FederatedServers { get; set; }
+        public List<FederatedServer> FederatedServers { get; set; } = new List<FederatedServer>();
 
-        public PluginConfiguration()
+        public void AddFederatedServer(FederatedServer server)
         {
-            FederatedServers = new List<FederatedServer>();
+            FederatedServers.Add(server);
+        }
+
+        public void RemoveFederatedServer(FederatedServer server)
+        {
+            FederatedServers.Remove(server);
         }
 
         public class FederatedServer
