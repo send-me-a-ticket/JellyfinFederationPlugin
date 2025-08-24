@@ -9,7 +9,7 @@ with import <nixpkgs> {};
     # pkgs.python311
     # pkgs.python311Packages.pip
     # pkgs.nodejs_20
-    pkgs.dotnet-sdk
+    pkgs.dotnet-sdk_8
     # pkgs.nodePackages.nodemon
   ];
 
