@@ -1,3 +1,5 @@
 /.vs
+/.examples
+/.idx
 /bin
 /obj
