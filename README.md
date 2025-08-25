@@ -23,6 +23,10 @@ More testing and contributions are needed to reach alpha.
 `dotnet build -c release`
 
 ---
+### DISCLAIMER
+
+This is still very much a work in progress. If the code somehow melts your CPU or summons any kind of ancient evil, I am not liable for damages- digital, physical, mental or anything else.
 
 > ☭ united federation of jellyfin
+
 
