@@ -19,7 +19,7 @@ Please do not install on production systems, your library items may be irreversi
 
 * Currently libraries are only readable from API. More work to be done.
 * Create a new libraries for federated content (Federated Movies, Federated Shows, Federated Music, Federated Books, Federated Others)
-* Ensure virtual items created within federated library
+* Ensure virtual items created within federated library, with metadata.
 * Scheduled sync from remote servers
 
 
@@ -91,6 +91,7 @@ So shall the fight for freedom begin -
 join the united federation of jellyfin
 
 ☭
+
 
 
 
