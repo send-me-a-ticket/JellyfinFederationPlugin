@@ -15,6 +15,14 @@ So I was able to get the plugin on a somewhat functional state.. lot more testin
 
 Please do not install on production systems, your library items may be irreversibly damaged or broken.
 
+#### TODO
+
+* Currently libraries are only readable from API. More work to be done.
+* Create a new library for federated content
+* Ensure virtual items created within federated library
+* Scheduled sync from remote servers
+
+
 
 ## 🛠️ Installation Instructions
 
@@ -83,6 +91,7 @@ So shall the fight for freedom begin -
 join the united federation of jellyfin
 
 ☭
+
 
 
 
