@@ -12,6 +12,7 @@ More testing and contributions are needed to reach alpha.
 
 ### load manifest
 `name`: `Jellyfin Federation Manifesto`
+
 `url`: `https://github.com/send-me-a-ticket/JellyfinFederationPlugin/raw/refs/heads/main/manifest.json`
 
 
@@ -31,6 +32,7 @@ More testing and contributions are needed to reach alpha.
 This is still very much a work in progress. If the code somehow melts your CPU or summons any kind of ancient evil, I am not liable for damages- digital, physical, mental or anything else.
 
 > ☭ united federation of jellyfin
+
 
 
 
