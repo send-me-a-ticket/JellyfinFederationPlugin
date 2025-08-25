@@ -75,10 +75,11 @@ They claim the map, they own the road,
 
 they weigh our messages, crush our words,
 
-So shall the fight for freedom being -
+So shall the fight for freedom begin -
 
 join the united federation of jellyfin
 
 ☭
+
 
 
