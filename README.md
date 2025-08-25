@@ -7,7 +7,8 @@
 
 ### Early Build Now Available - August 25, 2025
 
-So I was able to get the plugin on a somewhat functional state.. lot more testing and contributions are needed to reach alpha. Please do not install on production systems, your library items may be irreversibly damaged or broken.
+So I was able to get the plugin on a somewhat functional state.. lot more testing and contributions are needed to reach alpha.
+Please do not install on production systems, your library items may be irreversibly damaged or broken.
 
 
 ## 🛠️ Installation Instructions
@@ -41,3 +42,4 @@ After installation, access the plugin's configuration page. Here, you can setup 
 This is still very much a work in progress. If the code somehow melts your CPU or summons any kind of ancient evil, I am not liable for damages- digital, physical, mental or anything else.
 
 > ☭ united federation of jellyfin
+
