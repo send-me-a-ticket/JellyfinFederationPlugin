@@ -37,8 +37,6 @@ namespace JellyfinFederationPlugin.Configuration
         public bool ServerMode { get; set; } = true;
         public bool RequireHttps { get; set; } = true;
         public bool AdminOnlyChanges { get; set; } = true;
-
-        // Top-level libraries to share (CollectionFolder Ids, Guid "N" strings)
         public List<string> SharedLibraryIds { get; set; } = new();
         public List<FederatedServer> FederatedServers { get; set; } = new();
 
@@ -70,8 +68,6 @@ namespace JellyfinFederationPlugin
         private readonly ILibraryManager _libraryManager;
         private readonly ILogger<Plugin> _logger;
         private readonly IConfigurationManager _configManager;
-
-        // Services (initialized in ctor; also exposed via internal statics for controller access)
         private readonly FederationRequestHandler _requestHandler;
         private readonly FederationLibraryService _libraryService;
         private readonly PlaybackProxyService _playbackProxy;
@@ -105,14 +101,13 @@ namespace JellyfinFederationPlugin
                 _logger
             );
 
-            // Expose to controller via internal statics
             RequestHandler = _requestHandler;
             LibraryService = _libraryService;
             PlaybackProxy = _playbackProxy;
 
             _logger.LogInformation("Jellyfin Federation Plugin initialized");
 
-            _ = SafeMergeAsync(); // observed background merge
+            _ = SafeMergeAsync();
         }
 
         internal async Task SafeMergeAsync(CancellationToken ct = default)
@@ -145,19 +140,17 @@ namespace JellyfinFederationPlugin
 
         public override void UpdateConfiguration(BasePluginConfiguration configuration)
         {
-            base.UpdateConfiguration(configuration); // this persists the plugin configuration
+            base.UpdateConfiguration(configuration);
             _logger.LogInformation("Configuration updated");
         }
 
         public IEnumerable<PluginPageInfo> GetPages()
         {
-            // Provide an embedded HTML page that bootstraps the server-rendered config (no iframe).
-            // It fetches /Federation/ConfigForm with the proper Authorization header.
             return new[]
             {
                 new PluginPageInfo
                 {
-                    Name = Name, // this appears in the Plugins UI
+                    Name = Name,
                     EmbeddedResourcePath = string.Format(
                         CultureInfo.InvariantCulture,
                         "{0}.Configuration.configPage.html",
@@ -314,7 +307,6 @@ namespace JellyfinFederationPlugin.Internal
         }
     }
 
-    // -------------------- Library Aggregation (no custom protocols) --------------------
     internal sealed class FederationLibraryService
     {
         private readonly ILibraryManager _libraryManager;
@@ -413,7 +405,6 @@ namespace JellyfinFederationPlugin.Internal
 
         public string BuildRemoteStreamUrl(string baseUrl, string remoteItemId)
         {
-            // Stream endpoint path may vary; adjust to your federation contract
             return $"{baseUrl.TrimEnd('/')}/Items/{remoteItemId}/Playback";
         }
     }
@@ -427,7 +418,7 @@ namespace JellyfinFederationPlugin.Web
     // -------------------- Controller & HTML --------------------
     [ApiController]
     [Route("Federation")]
-    [Authorize] // config UI lives under dashboard; requires authenticated user
+    [Authorize]
     public sealed class FederationController : ControllerBase
     {
         private readonly ILogger<FederationController> _logger;
@@ -472,7 +463,6 @@ namespace JellyfinFederationPlugin.Web
             return Forbid();
         }
 
-        // -------------------- Config Page (server-rendered, NO SPA; minimal JS bridge will fetch this) --------------------
         [HttpGet("ConfigForm")]
         public IActionResult ConfigForm(
             [FromQuery] string? status = null,
@@ -481,7 +471,6 @@ namespace JellyfinFederationPlugin.Web
         {
             var cfg = Plugin.Instance.Configuration;
 
-            // Federated servers table
             var rowsServers = string.Join(
                 "",
                 cfg.FederatedServers.Select(s =>
@@ -489,7 +478,6 @@ namespace JellyfinFederationPlugin.Web
                 )
             );
 
-            // Enumerate top-level libraries (CollectionFolder) off RootFolder
             var root = _libraryManager.RootFolder;
             var libraries = root
                 .Children.OfType<CollectionFolder>()
@@ -952,7 +940,7 @@ code{{background:#f5f5f5;padding:2px 4px;border-radius:4px}}
 
         // Example: GET /Federation/Stream?serverUrl=https://peer:8096&id=<GUID-N>
         [HttpGet("Stream")]
-        [AllowAnonymous] // redirect only needs basic input validation
+        [AllowAnonymous]
         public IActionResult Stream(
             [FromQuery, Required] string serverUrl,
             [FromQuery, Required] string id
@@ -973,3 +961,4 @@ code{{background:#f5f5f5;padding:2px 4px;border-radius:4px}}
         }
     }
 }
+
