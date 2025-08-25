@@ -23,6 +23,14 @@ setup configurations, enable or disable server modes, client modes. add peer ser
 
 ---
 
+
+## Build Instructions
+
+
+### Tools Needed
+`Visual Studio 2022` or `Visual Studio Code`, `C# SDK`
+
+
 ### get md5 checksum
 `certutil -hashfile Release.zip MD5`
 
@@ -37,6 +45,7 @@ setup configurations, enable or disable server modes, client modes. add peer ser
 This is still very much a work in progress. If the code somehow melts your CPU or summons any kind of ancient evil, I am not liable for damages- digital, physical, mental or anything else.
 
 > ☭ united federation of jellyfin
+
 
 
 
