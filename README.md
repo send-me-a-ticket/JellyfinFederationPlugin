@@ -73,13 +73,14 @@ Can't enslave the human mind.
 -
 They claim the map, they own the road,
 
-they weigh our messages, crush our words,
+they weigh our messages, silence our words,
 
 So shall the fight for freedom begin -
 
 join the united federation of jellyfin
 
 ☭
+
 
 
 
