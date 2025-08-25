@@ -1,66 +1,463 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Jellyfin Federation Plugin</title>
-</head>
-<body>
-    <div id="FederationConfigPage" data-role="page" class="page type-interior pluginConfigurationPage">
-        <div data-role="content">
-            <div class="content-primary">
-                <form id="FederationConfigForm">
-                    <div class="sectionTitleContainer flex align-items-center">
-                        <h2 class="sectionTitle">Federation Configuration</h2>
-                    </div>
-                    <div class="verticalSection">
-                        <div class="sectionTitleContainer flex align-items-center">
-                            <h3 class="sectionTitle">Federated Servers</h3>
-                        </div>
-                        <div id="serverList" class="checkboxList paperList">
-                            <!-- Server entries will be added here -->
-                        </div>
-                        <br>
-                        <button is="emby-button" type="button" id="addServer" class="raised button-submit emby-button">
-                            <span>Add Server</span>
-                        </button>
-
-                        <div id="addServerDialog" style="display:none;">
-                            <h3>Add New Server</h3>
-                            <div class="inputContainer">
-                                <input is="emby-input" type="text" id="newServerUrl" label="Server URL" placeholder="http://192.168.1.100:8096" />
-                            </div>
-                            <div class="inputContainer">
-                                <input is="emby-input" type="text" id="newServerApiKey" label="API Key" placeholder="Enter API Key" />
-                            </div>
-                            <div class="inputContainer">
-                                <input is="emby-input" type="number" id="newServerPort" label="Port" value="8096" placeholder="8096" />
-                            </div>
-                            <button is="emby-button" type="button" id="addNewServerBtn" class="raised button-submit emby-button">
-                                <span>Add</span>
-                            </button>
-                            <button is="emby-button" type="button" id="cancelAddServerBtn" class="raised button-cancel emby-button">
-                                <span>Cancel</span>
-                            </button>
-                        </div>
-                    </div>
-                    <br>
-                    <div>
-                        <button is="emby-button" type="submit" class="raised button-submit emby-button">
-                            <span>Save</span>
-                        </button>
-                        <button is="emby-button" type="button" id="resetConfig" class="raised button-cancel emby-button">
-                            <span>Reset</span>
-                        </button>
-                    </div>
-                </form>
+  <head>
+    <meta charset="utf-8" />
+    <title>Jellyfin Federation</title>
+  </head>
+  <body>
+    <div
+      id="federationConfigPage"
+      translate="no"
+      data-role="page"
+      class="page type-interior pluginConfigurationPage"
+      data-require="emby-input,emby-button,emby-select,emby-checkbox"
+    >
+      <div data-role="content">
+        <div class="content-primary">
+          <h1>Jellyfin Federation Plugin</h1>
+          <form id="federationConfigForm" autocomplete="off">
+            <div
+              class="verticalSection verticalSection-extrabottompadding"
+              is="emby-collapse"
+              title="Modes"
+            >
+              <div class="collapseContent">
+                <label class="checkboxContainer">
+                  <input
+                    is="emby-checkbox"
+                    type="checkbox"
+                    id="EnableFederation"
+                  />
+                  <span>I agree to the terms and conditions.</span>
+                </label>
+                <label class="checkboxContainer">
+                  <input
+                    is="emby-checkbox"
+                    type="checkbox"
+                    id="AdminOnlyChanges"
+                  />
+                  <span>Admin‑only config changes</span>
+                </label>
+              </div>
             </div>
-        </div>
-    </div>
 
-    <script type="text/javascript">
-        require(['./config'], function (configModule) {
-            configModule.default(document);
-        });
-    </script>
-</body>
+            <br />
+            <h3>Server Mode Configuration</h3>
+
+            <div
+              class="verticalSection verticalSection-extrabottompadding"
+              is="emby-collapse"
+              title="Shareable Libraries (Server Mode)"
+            >
+              <label class="checkboxContainer">
+                <input is="emby-checkbox" type="checkbox" id="ServerMode" />
+                <span>Enable Server Mode</span> </label
+              ><br />
+
+              <br />
+              <h4>Shared Libraries</h4>
+
+              <div class="collapseContent">
+                <div id="libsInfo" class="fieldDescription">
+                  Loading libraries…
+                </div>
+                <div id="librariesList"></div>
+              </div>
+            </div>
+
+            <br /><br />
+            <h3>Client Mode Configuration</h3>
+            <label class="checkboxContainer">
+              <input is="emby-checkbox" type="checkbox" id="ClientMode" />
+              <span>Enable Client Mode</span>
+            </label>
+            <label class="checkboxContainer">
+              <input is="emby-checkbox" type="checkbox" id="RequireHttps" />
+              <span>Require HTTPS</span>
+            </label>
+
+            <h4>Saved Peers</h4>
+            <br />
+
+            <div style="margin-top: 1rem">
+              <table class="defaultTable" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>Server URL</th>
+                    <th>Port</th>
+                    <th>Has API Key</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="serversTableBody"></tbody>
+              </table>
+            </div>
+
+            <div
+              class="verticalSection verticalSection-extrabottompadding"
+              is="emby-collapse"
+              title="Federated Servers (Client Mode)"
+            >
+              <h4>Add New Peer</h4>
+              <br />
+
+              <div class="collapseContent">
+                <div class="inputContainer">
+                  <input
+                    is="emby-input"
+                    type="text"
+                    id="NewServerUrl"
+                    label="Server URL"
+                    placeholder="https://peer:8096"
+                  />
+                </div>
+                <div class="inputContainer">
+                  <input
+                    is="emby-input"
+                    type="number"
+                    id="NewServerPort"
+                    label="Port"
+                    min="1"
+                    max="65535"
+                    value="8096"
+                  />
+                </div>
+                <div class="inputContainer">
+                  <input
+                    is="emby-input"
+                    type="password"
+                    id="NewApiKey"
+                    label="API Key (optional)"
+                  />
+                </div>
+                <button
+                  is="emby-button"
+                  id="AddServerBtn"
+                  type="button"
+                  class="raised button-submit"
+                >
+                  <span>Add Peer Server</span>
+                </button>
+                <br /><br />
+
+                <div>
+                  <button
+                    is="emby-button"
+                    type="submit"
+                    class="raised button-submit block emby-button"
+                  >
+                    <span>Save</span>
+                  </button>
+                </div>
+
+                <br /><br />
+                <h3>Test Configuration</h3>
+                <br />
+
+                <div class="inputContainer" style="margin-top: 1rem">
+                  <input
+                    is="emby-input"
+                    type="text"
+                    id="TestServerUrl"
+                    label="Test: Server URL"
+                    placeholder="https://peer:8096"
+                  />
+                </div>
+                <div class="inputContainer">
+                  <input
+                    is="emby-input"
+                    type="password"
+                    id="TestApiKey"
+                    label="Test: API Key (optional)"
+                  />
+                </div>
+                <button
+                  is="emby-button"
+                  id="TestConnectionBtn"
+                  type="button"
+                  class="raised"
+                >
+                  <span>Test Connection</span>
+                </button>
+                <div id="TestResult" class="fieldDescription"></div>
+              </div>
+            </div>
+
+            <div class="verticalSection" is="emby-collapse" title="Status">
+              <div class="collapseContent">
+                <pre
+                  id="StatusBox"
+                  class="fieldDescription"
+                  style="white-space: pre-wrap"
+                >
+Loading…</pre
+                >
+              </div>
+            </div>
+
+            <div>
+                <button
+                  is="emby-button"
+                  type="submit"
+                  class="raised button-submit block emby-button"
+                >
+                  <span>Save All</span>
+                </button>
+                <button
+                is="emby-button"
+                type="reset"
+                class="raised button-reset block emby-button"
+              >
+                <span>Reset</span>
+              </button>
+              </div>
+
+          </form>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        (function () {
+          const pluginId = "931820b5-4177-4f48-be30-f0a34db3693f";
+
+          let federatedServers = [];
+          let sharedLibraryIds = [];
+          let allLibraries = [];
+
+          const page = document.getElementById("federationConfigPage");
+          const form = document.getElementById("federationConfigForm");
+          const libsInfo = document.getElementById("libsInfo");
+          const libsDiv = document.getElementById("librariesList");
+          const serversT = document.getElementById("serversTableBody");
+          const statusBox = document.getElementById("StatusBox");
+
+          const el = (id) => document.getElementById(id);
+
+          function renderLibraries() {
+            libsDiv.innerHTML = "";
+            if (!allLibraries.length) {
+              libsInfo.textContent = "No libraries found.";
+              return;
+            }
+            libsInfo.textContent =
+              "Select top-level libraries to share (Server Mode):";
+
+            allLibraries.forEach((lib) => {
+              const label = document.createElement("label");
+              label.className = "checkboxContainer";
+
+              const cb = document.createElement("input");
+              cb.setAttribute("is", "emby-checkbox");
+              cb.type = "checkbox";
+              cb.dataset.libId = lib.id;
+              cb.checked = sharedLibraryIds.includes(lib.id);
+              cb.addEventListener("change", () => {
+                const id = cb.dataset.libId;
+                if (cb.checked) {
+                  if (!sharedLibraryIds.includes(id)) sharedLibraryIds.push(id);
+                } else {
+                  sharedLibraryIds = sharedLibraryIds.filter((x) => x !== id);
+                }
+              });
+
+              const txt = document.createElement("span");
+              txt.textContent = lib.name + " ";
+              const desc = document.createElement("span");
+              desc.className = "fieldDescription";
+              desc.textContent = "(" + lib.type + ")";
+              txt.appendChild(desc);
+
+              label.appendChild(cb);
+              label.appendChild(txt);
+              libsDiv.appendChild(label);
+            });
+          }
+
+          function renderServers() {
+            serversT.innerHTML = "";
+            federatedServers.forEach((s, idx) => {
+              const tr = document.createElement("tr");
+
+              const tdUrl = document.createElement("td");
+              tdUrl.textContent = s.ServerUrl || "";
+              const tdPort = document.createElement("td");
+              tdPort.textContent = s.Port != null ? String(s.Port) : "";
+              const tdKey = document.createElement("td");
+              tdKey.textContent = s.ApiKey && s.ApiKey.length ? "Yes" : "No";
+              const tdAct = document.createElement("td");
+
+              const btn = document.createElement("button");
+              btn.setAttribute("is", "emby-button");
+              btn.type = "button";
+              btn.className = "raised";
+              btn.addEventListener("click", () => {
+                federatedServers.splice(idx, 1);
+                renderServers();
+              });
+              const span = document.createElement("span");
+              span.textContent = "Remove";
+              btn.appendChild(span);
+              tdAct.appendChild(btn);
+
+              tr.appendChild(tdUrl);
+              tr.appendChild(tdPort);
+              tr.appendChild(tdKey);
+              tr.appendChild(tdAct);
+              serversT.appendChild(tr);
+            });
+          }
+
+          async function loadStatus() {
+            try {
+              const st = await ApiClient.ajax({
+                url: ApiClient.getUrl("Federation/Status"),
+                type: "GET",
+                dataType: "json",
+              });
+              statusBox.textContent =
+                `Enable: ${st.enableFederation}\nClient: ${st.clientMode}\nServer: ${st.serverMode}\n` +
+                `RequireHttps: ${st.requireHttps}\nServers: ${
+                  st.serverCount
+                }\nShared libraries: ${st.sharedLibraries.join(", ")}`;
+            } catch {
+              statusBox.textContent = "Status unavailable.";
+            }
+          }
+
+          async function loadConfig() {
+            Dashboard.showLoadingMsg();
+
+            // Discover libraries from official endpoint (user-aware)
+            const [config, libsResp] = await Promise.all([
+              ApiClient.getPluginConfiguration(pluginId),
+              ApiClient.ajax({
+                url: ApiClient.getUrl("Library/MediaFolders"),
+                type: "GET",
+                dataType: "json",
+              }),
+            ]);
+
+            el("EnableFederation").checked = !!config.EnableFederation;
+            el("ClientMode").checked = !!config.ClientMode;
+            el("ServerMode").checked = !!config.ServerMode;
+            el("RequireHttps").checked = !!config.RequireHttps;
+            el("AdminOnlyChanges").checked = !!config.AdminOnlyChanges;
+
+            allLibraries = (libsResp.Items || []).map((x) => ({
+              id: x.Id,
+              name: x.Name,
+              type: x.CollectionType || "Mixed",
+            })); // /Library/MediaFolders is the supported discovery path. [4](https://github.com/jellyfin/jellyfin-plugin-bookshelf/blob/master/Jellyfin.Plugin.Bookshelf/Configuration/configPage.html)[5](https://github.com/DirtyRacer1337/Jellyfin.Plugin.Stash/blob/main/Jellyfin.Plugin.Stash/Configuration/configPage.html)
+            sharedLibraryIds = (config.SharedLibraryIds || []).slice();
+            renderLibraries();
+
+            federatedServers = (config.FederatedServers || []).map((s) => ({
+              ServerUrl: s.ServerUrl || "",
+              Port: s.Port || 8096,
+              ApiKey: s.ApiKey || "",
+            }));
+            renderServers();
+
+            await loadStatus();
+            Dashboard.hideLoadingMsg();
+          }
+
+          function onAddServer() {
+            const url = (el("NewServerUrl").value || "").trim();
+            const port = parseInt(el("NewServerPort").value || "8096", 10);
+            const key = (el("NewApiKey").value || "").trim();
+
+            if (!url) {
+              alert("Server URL is required");
+              return;
+            }
+            federatedServers.push({
+              ServerUrl: url,
+              Port: isNaN(port) ? 8096 : port,
+              ApiKey: key,
+            });
+            el("NewServerUrl").value = "";
+            el("NewServerPort").value = "8096";
+            el("NewApiKey").value = "";
+            renderServers();
+          }
+
+          async function onTestConnection() {
+            const url = (el("TestServerUrl").value || "").trim();
+            const key = (el("TestApiKey").value || "").trim();
+            if (!url) {
+              el("TestResult").textContent = "Enter a server URL";
+              return;
+            }
+
+            el("TestResult").textContent = "Testing…";
+            try {
+              const resp = await ApiClient.ajax({
+                url: ApiClient.getUrl("Federation/TestConnection"),
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ ServerUrl: url, ApiKey: key }),
+                dataType: "json",
+              });
+              el("TestResult").textContent =
+                resp && resp.success
+                  ? "OK: " + resp.message
+                  : "Failed: " + (resp ? resp.message : "unknown");
+            } catch (e) {
+              el("TestResult").textContent = "Error: " + e;
+            }
+          }
+
+          async function onSave(e) {
+            e.preventDefault();
+            Dashboard.showLoadingMsg();
+
+            const cfg = await ApiClient.getPluginConfiguration(pluginId);
+            cfg.EnableFederation = el("EnableFederation").checked;
+            cfg.ClientMode = el("ClientMode").checked;
+            cfg.ServerMode = el("ServerMode").checked;
+            cfg.RequireHttps = el("RequireHttps").checked;
+            cfg.AdminOnlyChanges = el("AdminOnlyChanges").checked;
+
+            cfg.SharedLibraryIds = sharedLibraryIds.slice();
+            cfg.FederatedServers = federatedServers.map((s) => ({
+              ServerUrl: s.ServerUrl,
+              Port: s.Port,
+              ApiKey: s.ApiKey,
+            }));
+
+            try {
+              const result = await ApiClient.updatePluginConfiguration(
+                pluginId,
+                cfg
+              );
+              Dashboard.processPluginConfigurationUpdateResult(result);
+
+              // Kick merge AFTER save to keep the save API clean.
+              try {
+                await ApiClient.ajax({
+                  url: ApiClient.getUrl("Federation/Refresh"),
+                  type: "POST",
+                  dataType: "json",
+                });
+              } catch {}
+
+              await loadStatus();
+            } finally {
+              Dashboard.hideLoadingMsg();
+            }
+          }
+
+          page.addEventListener("pageshow", loadConfig);
+          document
+            .getElementById("AddServerBtn")
+            .addEventListener("click", onAddServer);
+          document
+            .getElementById("TestConnectionBtn")
+            .addEventListener("click", onTestConnection);
+          form.addEventListener("submit", onSave);
+        })();
+      </script>
+    </div>
+  </body>
 </html>
