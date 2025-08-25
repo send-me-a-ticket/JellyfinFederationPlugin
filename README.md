@@ -2,7 +2,7 @@
 
 ## 🚧 under construction, come back later (or contribute) 🚧
 
-### Early Alpha Build - August 25, 2025
+### Early Build - August 25, 2025
 
 So I was able to get the plugin on a somewhat stable state..
 More testing and contributions are needed to reach alpha.
@@ -28,5 +28,6 @@ More testing and contributions are needed to reach alpha.
 This is still very much a work in progress. If the code somehow melts your CPU or summons any kind of ancient evil, I am not liable for damages- digital, physical, mental or anything else.
 
 > ☭ united federation of jellyfin
+
 
 
