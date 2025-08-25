@@ -10,11 +10,16 @@ More testing and contributions are needed to reach alpha.
 
 ## Installation Instructions
 
-### load manifest
+### 1. Load Manifest
 name: `Jellyfin Federation Manifesto`
 
 url: `https://github.com/send-me-a-ticket/JellyfinFederationPlugin/raw/refs/heads/main/manifest.json`
 
+### 2. Install Plugin
+refresh your plugin library, you will find "Jellyfin Federation Plugin" on the list.
+
+### 3. Configure
+setup configurations, enable or disable server modes, client modes. add peer server URLs and their API codes.
 
 ---
 
@@ -32,6 +37,7 @@ url: `https://github.com/send-me-a-ticket/JellyfinFederationPlugin/raw/refs/head
 This is still very much a work in progress. If the code somehow melts your CPU or summons any kind of ancient evil, I am not liable for damages- digital, physical, mental or anything else.
 
 > ☭ united federation of jellyfin
+
 
 
 
