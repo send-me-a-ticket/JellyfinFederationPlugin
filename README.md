@@ -52,7 +52,7 @@ A thousand threads, a silent seed,
 
 free to watch, free to read.
 
-
+-
 For kinship formed on common ground,
 
 Treasures lost and knowledge found,
@@ -61,7 +61,7 @@ A chain of trust, a bond of pain,
 
 To future builds, on web of light.
 
-
+-
 Rise, people, unbound and bold,
 
 push back against all evils old,
@@ -70,6 +70,7 @@ Greedy foes who seek to bind,
 
 Can't enslave the human mind.
 
+-
 They claim the map, they own the road,
 
 they weigh our messages, crush our words,
@@ -79,4 +80,5 @@ So shall the fight for freedom being -
 join the united federation of jellyfin
 
 ☭
+
 
