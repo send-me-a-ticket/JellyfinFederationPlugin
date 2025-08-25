@@ -3,6 +3,8 @@
 **🚧 UNDER CONSTRUCTION 🚧**
 *( please come back later or contribute )*
 
+**⚠️ DISCLAIMER**
+This is still very much a work in progress. If the code somehow melts your CPU or summons any kind of ancient evil, I am not liable for damages- digital, physical, mental or anything else.
 ---
 
 ### Early Build Now Available - August 25, 2025
@@ -39,10 +41,7 @@ After installation, access the plugin's configuration page. Here, you can setup 
 ### Generate Build File
 `dotnet build -c release`
 
-
-## ⚠️ DISCLAIMER
-This is still very much a work in progress. If the code somehow melts your CPU or summons any kind of ancient evil, I am not liable for damages- digital, physical, mental or anything else.
-
 > ☭ united federation of jellyfin
+
 
 
