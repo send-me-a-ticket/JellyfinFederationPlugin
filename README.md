@@ -3,7 +3,7 @@
 **🚧 UNDER CONSTRUCTION 🚧**
 *( please come back later or contribute )*
 
-*⚠️ DISCLAIMER*
+*⚠️ DISCLAIMER : *
 This is still very much a work in progress. If the code somehow melts your CPU or summons any kind of ancient evil, I am not liable for damages- digital, physical, mental or anything else.
 
 ---
@@ -43,6 +43,7 @@ After installation, access the plugin's configuration page. Here, you can setup 
 `dotnet build -c release`
 
 > ☭ united federation of jellyfin
+
 
 
 
