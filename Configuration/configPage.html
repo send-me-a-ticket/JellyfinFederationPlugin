@@ -347,7 +347,7 @@ Loading…</pre
               id: x.Id,
               name: x.Name,
               type: x.CollectionType || "Mixed",
-            })); // /Library/MediaFolders is the supported discovery path. [4](https://github.com/jellyfin/jellyfin-plugin-bookshelf/blob/master/Jellyfin.Plugin.Bookshelf/Configuration/configPage.html)[5](https://github.com/DirtyRacer1337/Jellyfin.Plugin.Stash/blob/main/Jellyfin.Plugin.Stash/Configuration/configPage.html)
+            }));
             sharedLibraryIds = (config.SharedLibraryIds || []).slice();
             renderLibraries();
 
@@ -432,8 +432,6 @@ Loading…</pre
                 cfg
               );
               Dashboard.processPluginConfigurationUpdateResult(result);
-
-              // Kick merge AFTER save to keep the save API clean.
               try {
                 await ApiClient.ajax({
                   url: ApiClient.getUrl("Federation/Refresh"),
@@ -461,3 +459,4 @@ Loading…</pre
     </div>
   </body>
 </html>
+
